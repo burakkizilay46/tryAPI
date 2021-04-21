@@ -13,13 +13,50 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
   @override
   void initState() {
     super.initState();
-    veriKaynaginiOku().then((gelenArabaListesi) {
+    /*veriKaynaginiOku().then((gelenArabaListesi) {
       setState(() {
         tumArabalar = gelenArabaListesi;
       });
     });
+    */
   }
 
+  @override
+  Widget build(BuildContext context) {
+    veriKaynaginiOku();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Local JSON Page"),
+      ),
+      body: Container(
+        child: FutureBuilder(
+          future: veriKaynaginiOku(),
+          builder: (context, sonuc) {
+            if (sonuc.hasData) {
+              tumArabalar = sonuc.data;
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(tumArabalar[index]["araba_adi"]),
+                    subtitle: Text(tumArabalar[index]["ulke"]),
+                  );
+                },
+                itemCount: tumArabalar.length,
+              );
+            }
+            else{
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  /*
   @override
   Widget build(BuildContext context) {
     veriKaynaginiOku();
@@ -44,7 +81,7 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
             ),
     );
   }
-
+  */
   Future<List> veriKaynaginiOku() async {
     /*
       Future<String> jsonOku =
@@ -53,7 +90,7 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
       jsonOku.then((okunanJson) {
         debugPrint("Gelen Json: " + okunanJson);
         return okunanJson;
-     });
+      });
     */
 
     var gelenJson = await DefaultAssetBundle.of(context)
