@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'dart:convert';
 
+import 'package:tryagainapi/models/Araba.dart';
+
 class LocalJsonPage extends StatefulWidget {
   @override
   _LocalJsonPageState createState() => _LocalJsonPageState();
 }
 
 class _LocalJsonPageState extends State<LocalJsonPage> {
-  List tumArabalar;
+  List<Araba> tumArabalar;
 
   @override
   void initState() {
@@ -38,14 +40,13 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(tumArabalar[index]["araba_adi"]),
-                    subtitle: Text(tumArabalar[index]["ulke"]),
+                    title: Text(tumArabalar[index].arabaAdi),
+                    subtitle: Text(tumArabalar[index].ulke),
                   );
                 },
                 itemCount: tumArabalar.length,
               );
-            }
-            else{
+            } else {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -82,7 +83,7 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
     );
   }
   */
-  Future<List> veriKaynaginiOku() async {
+  Future<List<Araba>> veriKaynaginiOku() async {
     /*
       Future<String> jsonOku =
           DefaultAssetBundle.of(context).loadString("assets/data/araba.json");
@@ -97,11 +98,11 @@ class _LocalJsonPageState extends State<LocalJsonPage> {
         .loadString("assets/data/araba.json");
     debugPrint(gelenJson);
 
-    var arabaListesi = json.decode(gelenJson.toString());
+    List<Araba> arabaListesi = (json.decode(gelenJson) as List).map((mapYapisi) => Araba.fromJson(mapYapisi)).toList();
     debugPrint("toplam araba sayisi : " + arabaListesi.length.toString());
     for (int i = 0; i < arabaListesi.length; i++) {
-      debugPrint("Markalar : " + arabaListesi[i]["araba_adi"].toString());
-      debugPrint("Ülkesi : " + arabaListesi[i]["ulke"].toString());
+      debugPrint("Markalar : " + arabaListesi[i].arabaAdi.toString());
+      debugPrint("Ülkesi : " + arabaListesi[i].ulke.toString());
     }
     return arabaListesi;
   }
